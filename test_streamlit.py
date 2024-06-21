@@ -19,7 +19,7 @@ ticker_symbol = 'USDJPY=X'
 ticker_data = yf.Ticker(ticker_symbol)
 
 # 指定された期間のUSD/JPYの歴史データをデータフレームとして取得
-tickerDF = ticker_data.history(period='2mo', interval="15m")
+tickerDF = ticker_data.history(period='60d', interval="15m")
 
 
 
