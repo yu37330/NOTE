@@ -81,6 +81,7 @@ def create_composite_chart(df):
 
 # Streamlitアプリケーション
 def main():
+    st.write("データの取得します。")
     st.title("Composite Chart for Gotoubi Days (5-Minute Interval)")
 
     ticker = 'USDJPY=X'  # USD/JPYのティッカーシンボル
