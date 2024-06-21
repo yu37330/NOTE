@@ -3,6 +3,9 @@ import streamlit as st
 import pandas as pd
 import time
 
+# ページ設定
+st.set_page_config(layout='wide')
+
 # データ取得関数に再試行ロジックを追加
 def load_data(ticker, retries=3, delay=5):
     for attempt in range(retries):
@@ -36,5 +39,4 @@ if st.button('Load Data'):
 
 # アプリケーションの実行
 if __name__ == '__main__':
-    st.set_page_config(layout='wide')
     st.write('Stock Price Analysis App')
