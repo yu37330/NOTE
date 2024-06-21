@@ -1,37 +1,47 @@
-import yfinance as yf
-import streamlit as st
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 13 14:45:28 2022
+
+@author: babs.ogunleye
+"""
+
 import pandas as pd
-import time
+import streamlit as st
+import yfinance as yf
 
-# ページ設定
-st.set_page_config(layout='wide')
 
-# データ取得関数にキャッシュを追加
-@st.cache_data
-def load_data(ticker):
-    try:
-        data = yf.download(ticker, period='7d', interval='5m', progress=False)
-        return data
-    except Exception as e:
-        st.error(f"データの取得中にエラーが発生しました: {e}")
-        return None
+#The code below writes the header for the web application 
+st.write("""
+# Stock Price Web Application
 
-# Streamlitアプリケーションのタイトル
-st.title('Stock Price Analysis')
+ 
+Shown are the stock closing **price** and ***volume*** of Amazon!
 
-# ユーザーから入力を受け取るテキストボックス
-ticker = st.text_input('Enter Stock Ticker', 'AAPL')
+**Period**: May 2012 - May 2022
+         
+""")
 
-# ボタンがクリックされたときにデータを取得する
-if st.button('Load Data'):
-    data = load_data(ticker)
-    if data is not None and not data.empty:
-        st.write('Data Loaded Successfully')
-        st.write(data.tail())  # 最新のデータを表示
-        st.line_chart(data['Close'])  # 終値のチャートを表示
-    else:
-        st.error('Failed to load data')
+#https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
 
-# アプリケーションの実行
-if __name__ == '__main__':
-    st.write('Stock Price Analysis App')
+ticker_symbol = 'AMZN'
+
+#get ticker data by creating a ticker object
+
+ticker_data = yf.Ticker(ticker_symbol)
+
+#get amazon historical stock data for a specified time period as a dataframe
+
+tickerDF = ticker_data.history(period="1mo",
+                               interval="1d",start='2012-5-31', end= '2022-5-31')
+
+#columns: Open, High, Low Close, Volume, Dividends and Stock Splits
+
+st.write("""
+         ## Stock Closing Price in USD
+         """    )
+st.line_chart(tickerDF.Close)
+
+st.write("""
+         ## Stock Volume in USD
+         """    )
+st.line_chart(tickerDF.Volume)
