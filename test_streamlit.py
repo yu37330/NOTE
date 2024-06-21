@@ -27,7 +27,7 @@ ticker_data = yf.Ticker(ticker_symbol)
 #get amazon historical stock data for a specified time period as a dataframe
 
 tickerDF = ticker_data.history(period="2mo",
-                               interval="5m")
+                               interval="15m")
 
 #columns: Open, High, Low Close, Volume, Dividends and Stock Splits
 
