@@ -15,11 +15,12 @@ def get_past_sixty_days_data(ticker):
     st.write("データのヘッダー:", data.head())
     st.write("データのカラム名:", data.columns)
     
-    # 'Datetime'列の存在を確認
-    if 'Datetime' not in data.columns:
-        raise KeyError("'Datetime'列がデータに存在しません")
+    # 'Date'列の存在を確認
+    if 'Date' not in data.columns:
+        raise KeyError("'Date'列がデータに存在しません")
     
-    data['Datetime'] = pd.to_datetime(data['Datetime']) + timedelta(hours=9)  # JSTに変換
+    data['Date'] = pd.to_datetime(data['Date']) + timedelta(hours=9)  # JSTに変換
+    data.rename(columns={'Date': 'Datetime'}, inplace=True)
     return data
 
 # ゴトー日を判定する関数
