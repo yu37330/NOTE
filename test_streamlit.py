@@ -11,6 +11,10 @@ def get_past_sixty_days_data(ticker):
     data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
     data.reset_index(inplace=True)
     
+    # データのヘッダーと最初の数行を表示して確認
+    st.write("データのヘッダー:", data.head())
+    st.write("データのカラム名:", data.columns)
+    
     # 'Datetime'列の存在を確認
     if 'Datetime' not in data.columns:
         raise KeyError("'Datetime'列がデータに存在しません")
