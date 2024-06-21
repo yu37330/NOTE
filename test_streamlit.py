@@ -4,10 +4,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import streamlit as st
 
-# 明示的なインポート
-import importlib_metadata
-import importlib_resources
-import streamlit.runtime.scriptrunner
+
 
 # 過去60日間の5分足データを取得する関数
 def get_past_sixty_days_data(ticker):
