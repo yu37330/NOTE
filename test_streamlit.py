@@ -20,7 +20,7 @@ ticker_symbol = 'USDJPY=X'
 ticker_data = yf.Ticker(ticker_symbol)
 
 # Get USD/JPY historical stock data for a specified time period as a dataframe
-tickerDF = ticker_data.history(period="1mo", interval="5m")
+tickerDF = ticker_data.history(period="59d", interval="5m")
 
 # Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
 st.write("## Forex Closing Price in JPY")
