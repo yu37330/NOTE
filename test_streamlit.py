@@ -4,14 +4,17 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import streamlit as st
 
-
-
 # 過去60日間の5分足データを取得する関数
 def get_past_sixty_days_data(ticker):
     end_date = datetime.today()
     start_date = end_date - timedelta(days=60)
     data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
     data.reset_index(inplace=True)
+    
+    # 'Datetime'列の存在を確認
+    if 'Datetime' not in data.columns:
+        raise KeyError("'Datetime'列がデータに存在しません")
+    
     data['Datetime'] = pd.to_datetime(data['Datetime']) + timedelta(hours=9)  # JSTに変換
     return data
 
@@ -72,12 +75,19 @@ def main():
     st.title("Composite Chart for Gotoubi Days (5-Minute Interval)")
 
     ticker = 'USDJPY=X'  # USD/JPYのティッカーシンボル
-    df = get_past_sixty_days_data(ticker)
-    st.write("Past Sixty Days Data", df)
 
-    st.write("Composite Chart")
-    plt = create_composite_chart(df)
-    st.pyplot(plt)
+    # データ取得とエラーハンドリング
+    try:
+        df = get_past_sixty_days_data(ticker)
+        st.write("Past Sixty Days Data", df)
+
+        st.write("Composite Chart")
+        plt = create_composite_chart(df)
+        st.pyplot(plt)
+    except KeyError as e:
+        st.error(f"データの取得中にエラーが発生しました: {e}")
+    except Exception as e:
+        st.error(f"予期しないエラーが発生しました: {e}")
 
 if __name__ == "__main__":
     main()
