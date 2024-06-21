@@ -32,6 +32,11 @@ ax.plot(tickerDF['Close'])
 ax.set_title('Forex Closing Price in USDJPY')
 ax.set_ylabel('Price in JPY')
 ax.set_xlabel('Time')
+# y軸の最小値をデータの最小値に設定
+ax.set_ylim(bottom=tickerDF['Close'].min() - (tickerDF['Close'].max() - tickerDF['Close'].min()) * 0.1)
+# Streamlitでチャートを表示
+st.pyplot(fig)
+
 # ゴトー日を判定する関数
 def is_gotoubi(date):
     day = date.day
