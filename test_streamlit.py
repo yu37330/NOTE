@@ -14,7 +14,7 @@ Shown are the stock closing **price** and ***volume*** of Amazon!
 
 # https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
 
-ticker_symbol = 'AMZN'
+ticker_symbol = 'USDJPY=X'
 
 # Get ticker data by creating a ticker object
 ticker_data = yf.Ticker(ticker_symbol)
