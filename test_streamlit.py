@@ -1,4 +1,5 @@
 
+
 import pandas as pd
 import streamlit as st
 import yfinance as yf
@@ -11,7 +12,7 @@ st.write("""
 
 Shown are the USD/JPY closing **price** and ***volume***!
 
-**Period**: May 2012 - May 2022
+**Period**: Last 60 days
 """)
 
 ticker_symbol = 'USDJPY=X'  # USD/JPYのティッカーシンボル
@@ -20,8 +21,7 @@ ticker_symbol = 'USDJPY=X'  # USD/JPYのティッカーシンボル
 ticker_data = yf.Ticker(ticker_symbol)
 
 # Get USD/JPY historical stock data for a specified time period as a dataframe
-tickerDF = ticker_data.history(period="1mo",
-                               interval="15m", start='2012-5-31', end='2022-5-31')
+tickerDF = ticker_data.history(period="30d", interval="1d")
 
 # Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
 st.write("""
@@ -52,6 +52,10 @@ def create_composite_chart(df):
     gotoubi_df['date'] = gotoubi_df.index.date
 
     # 0:00の価格を基準に差分を計算
+    if 'Close' not in gotoubi_df.columns:
+        st.error("データフレームに'Close'列が存在しません。データ取得が失敗しました。")
+        return
+
     base_prices = gotoubi_df[gotoubi_df['time_from_midnight'] == 0].set_index('date')['Close']
     gotoubi_df = gotoubi_df.join(base_prices, on='date', rsuffix='_base')
     gotoubi_df['price_diff'] = gotoubi_df['Close'] - gotoubi_df['Close_base']
@@ -90,7 +94,7 @@ def create_composite_chart(df):
     st.pyplot(plt)
 
 # データの取得
-ticker_data_5min = yf.download(ticker_symbol, period="1mo", interval="5m", start='2022-4-30', end='2022-5-31')
+ticker_data_5min = yf.download(ticker_symbol, period="60d", interval="5m")
 
 # ゴトー日の変動グラフを追加
 st.write("""
