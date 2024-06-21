@@ -1,25 +1,29 @@
+import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import streamlit as st
 
-# 疑似データを作成する関数
-def get_past_sixty_days_data(ticker):
-    # 現在の日付を基準に過去60日間の5分足データを作成
+# 過去7日間の5分足データを取得する関数
+def get_past_seven_days_data(ticker):
     end_date = datetime.today()
-    start_date = end_date - timedelta(days=60)
-    date_range = pd.date_range(start=start_date, end=end_date, freq='5T')
+    start_date = end_date - timedelta(days=7)
+    try:
+        data = yf.download(ticker, start=start_date, end=end_date, interval='5m', timeout=30)
+        data.reset_index(inplace=True)
+    except Exception as e:
+        st.error(f"データの取得中にエラーが発生しました: {e}")
+        return None
     
-    data = pd.DataFrame({
-        'Datetime': date_range,
-        'Open': 1.0,
-        'High': 1.0,
-        'Low': 1.0,
-        'Close': 1.0,
-        'Adj Close': 1.0,
-        'Volume': 0
-    })
-
+    # データのヘッダーと最初の数行を表示して確認
+    st.write("データのヘッダー:", data.head())
+    st.write("データのカラム名:", data.columns)
+    
+    # 'Datetime'列の存在を確認
+    if 'Datetime' not in data.columns:
+        st.error("'Datetime'列がデータに存在しません")
+        return None
+    
     data['Datetime'] = pd.to_datetime(data['Datetime']) + timedelta(hours=9)  # JSTに変換
     return data
 
@@ -82,9 +86,9 @@ def main():
     ticker = 'USDJPY=X'  # USD/JPYのティッカーシンボル
 
     # データ取得とエラーハンドリング
-    df = get_past_sixty_days_data(ticker)
+    df = get_past_seven_days_data(ticker)
     if df is not None:
-        st.write("Past Sixty Days Data", df)
+        st.write("Past Seven Days Data", df)
         st.write("Composite Chart")
         plt = create_composite_chart(df)
         st.pyplot(plt)
