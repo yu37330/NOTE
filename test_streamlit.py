@@ -89,7 +89,7 @@ def main():
     # データ取得とエラーハンドリング
     df = get_past_sixty_days_data(ticker)
     if df is not None:
-        st.write("Past Sixty Days Data", df)
+        st.write("Past Sixty Days Data", df.head())
         st.write("Composite Chart")
         plt = create_composite_chart(df)
         st.pyplot(plt)
