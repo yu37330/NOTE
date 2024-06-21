@@ -60,10 +60,10 @@ def create_composite_chart(df):
 
     # チャートを描画
     plt.figure(figsize=(12, 6))
-    plt.plot(median_series.index, median_series.values, label='')
-    plt.title('ゴトー日の合成チャート（5分間隔）')
-    plt.xlabel('0時からの時間（秒）')
-    plt.ylabel('中央値の価格差')
+    plt.plot(median_series.index, median_series.values, label='Median Price Difference from 0:00')
+    plt.title('Composite Chart for Gotoubi Days (5-Minute Interval)')
+    plt.xlabel('Time from Midnight (seconds)')
+    plt.ylabel('Median Price Difference')
     plt.axhline(y=0, color="#565656", alpha=0.3)
     plt.grid(True)
 
