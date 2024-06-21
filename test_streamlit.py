@@ -1,47 +1,32 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 13 14:45:28 2022
-
-@author: babs.ogunleye
-"""
-
 import pandas as pd
 import streamlit as st
 import yfinance as yf
 
-
-#The code below writes the header for the web application 
+# The code below writes the header for the web application 
 st.write("""
-# Stock Price Web Application
+# Forex Rate Web Application
 
- 
-Shown are the stock closing **price** and ***volume*** of Amazon!
+Shown are the USD/JPY closing **price** and ***volume***!
 
 **Period**: May 2012 - May 2022
-         
 """)
 
-#https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
+ticker_symbol = 'USDJPY=X'  # USD/JPYのティッカーシンボル
 
-ticker_symbol = 'AMZN'
-
-#get ticker data by creating a ticker object
-
+# Get ticker data by creating a ticker object
 ticker_data = yf.Ticker(ticker_symbol)
 
-#get amazon historical stock data for a specified time period as a dataframe
-
+# Get USD/JPY historical stock data for a specified time period as a dataframe
 tickerDF = ticker_data.history(period="1mo",
-                               interval="1d",start='2012-5-31', end= '2022-5-31')
+                               interval="1d", start='2012-5-31', end='2022-5-31')
 
-#columns: Open, High, Low Close, Volume, Dividends and Stock Splits
-
+# Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
 st.write("""
-         ## Stock Closing Price in USD
-         """    )
+         ## Forex Closing Price in JPY
+         """)
 st.line_chart(tickerDF.Close)
 
 st.write("""
-         ## Stock Volume in USD
-         """    )
+         ## Forex Volume in USD
+         """)
 st.line_chart(tickerDF.Volume)
