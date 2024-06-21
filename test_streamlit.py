@@ -44,6 +44,9 @@ def create_composite_chart(df):
     df['is_gotoubi'] = df.index.to_series().apply(lambda x: is_gotoubi(x))
     gotoubi_df = df[df['is_gotoubi']].copy()
 
+    # インデックスをDatetimeIndexに変換
+    gotoubi_df.index = pd.to_datetime(gotoubi_df.index)
+
     # 0時基準にデータを調整する
     gotoubi_df['time_from_midnight'] = gotoubi_df.index.hour * 3600 + gotoubi_df.index.minute * 60 + gotoubi_df.index.second
     gotoubi_df['date'] = gotoubi_df.index.date
