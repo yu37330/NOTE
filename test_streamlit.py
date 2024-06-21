@@ -74,7 +74,7 @@ def create_composite_chart(df):
 
     # チャートを描画
     plt.figure(figsize=(12, 6))
-    plt.plot(median_series.index, median_series.values, label='0:00からの中央値の価格差')
+    plt.plot(median_series.index, median_series.values, label='')
     plt.title('ゴトー日の合成チャート（5分間隔）')
     plt.xlabel('0時からの時間（秒）')
     plt.ylabel('中央値の価格差')
