@@ -21,7 +21,7 @@ ticker_data = yf.Ticker(ticker_symbol)
 
 # Get USD/JPY historical stock data for a specified time period as a dataframe
 tickerDF = ticker_data.history(period="1mo",
-                               interval="1d", start='2012-5-31', end='2022-5-31')
+                               interval="15m", start='2012-5-31', end='2022-5-31')
 
 # Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
 st.write("""
