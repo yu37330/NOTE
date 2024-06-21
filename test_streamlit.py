@@ -3,37 +3,37 @@ import streamlit as st
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-# The code below writes the header for the web application 
+# ウェブアプリケーションのヘッダーを表示
 st.write("""
-# Forex Rate Web Application
+# 為替レートウェブアプリケーション
 
-Shown are the USD/JPY closing **price**!
+表示されているのはUSD/JPYの終値**価格**です！
 
-**Period**: Last 1 month
+**期間**: 過去1ヶ月
 """)
 
-# https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
-
+# ティッカーシンボルの設定
 ticker_symbol = 'USDJPY=X'
 
-# Get ticker data by creating a ticker object
+# ティッカーオブジェクトを作成してデータを取得
 ticker_data = yf.Ticker(ticker_symbol)
 
-# Get USD/JPY historical stock data for a specified time period as a dataframe
+# 指定された期間のUSD/JPYの歴史データをデータフレームとして取得
 tickerDF = ticker_data.history(period='1mo', interval="15m")
 
-
 # タイトルを表示
-st.write("## Forex Closing Price in USDPY")
+st.write("## USD/JPYの終値")
 
 # matplotlibを使用してラインチャートを作成
 fig, ax = plt.subplots()
 ax.plot(tickerDF['Close'])
-ax.set_title('Forex Closing Price in USDJPY')
-ax.set_ylabel('Price in JPY')
-ax.set_xlabel('Time')
+ax.set_title('USD/JPYの終値')
+ax.set_ylabel('価格（JPY）')
+ax.set_xlabel('時間')
+
 # y軸の最小値をデータの最小値に設定
 ax.set_ylim(bottom=tickerDF['Close'].min() - (tickerDF['Close'].max() - tickerDF['Close'].min()) * 0.1)
+
 # Streamlitでチャートを表示
 st.pyplot(fig)
 
@@ -74,10 +74,10 @@ def create_composite_chart(df):
 
     # チャートを描画
     plt.figure(figsize=(12, 6))
-    plt.plot(median_series.index, median_series.values, label='Median Price Difference from 0:00')
-    plt.title('Composite Chart for Gotoubi Days (5-Minute Interval)')
-    plt.xlabel('Time from Midnight (seconds)')
-    plt.ylabel('Median Price Difference')
+    plt.plot(median_series.index, median_series.values, label='0:00からの中央値の価格差')
+    plt.title('ゴトー日の合成チャート（5分間隔）')
+    plt.xlabel('0時からの時間（秒）')
+    plt.ylabel('中央値の価格差')
     plt.axhline(y=0, color="#565656", alpha=0.3)
     plt.grid(True)
 
@@ -90,18 +90,11 @@ def create_composite_chart(df):
     plt.ylim([-0.1, 0.5])
 
     # 9:55に縦線を追加
-    plt.axvline(x=3*3600 + 30*60, color='red', linestyle='--', label='9:55')
-
-    # 9:55に縦線を追加
     plt.axvline(x=9*3600 + 55*60, color='red', linestyle='--', label='9:55')
-
-    # # 3:30から9:55に斜め矢印を追加
-    # plt.annotate('', xy=(9*3600 + 55*60, 0.15), xytext=(3.5*3600, -0.05),
-    #              arrowprops=dict(facecolor='red', shrink=0.05, width=5, headwidth=15))
 
     plt.legend()
     st.pyplot(plt)
 
 # ゴトー日の変動グラフを追加
-st.write("## Gotoubi Days Price Variation")
+st.write("## ゴトー日の価格変動")
 create_composite_chart(tickerDF)
