@@ -89,6 +89,10 @@ def create_composite_chart(df):
     # Y軸の表示範囲を設定
     plt.ylim([-0.1, 0.5])
 
+    # 3:30に縦線を追加
+    plt.axvline(x=3*3600 + 30*60, color='red', linestyle='--', label='3:30')
+
+
     # 9:55に縦線を追加
     plt.axvline(x=9*3600 + 55*60, color='red', linestyle='--', label='9:55')
 
