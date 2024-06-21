@@ -1,17 +1,28 @@
 import yfinance as yf
 import streamlit as st
 import pandas as pd
+import time
+
+# データ取得関数に再試行ロジックを追加
+def load_data(ticker, retries=3, delay=5):
+    for attempt in range(retries):
+        try:
+            data = yf.download(ticker, period='1d', interval='5m', progress=False)
+            return data
+        except Exception as e:
+            st.error(f"データの取得中にエラーが発生しました: {e}")
+            if attempt < retries - 1:
+                st.info(f"{delay}秒後に再試行します...")
+                time.sleep(delay)
+            else:
+                st.error("データの取得に失敗しました。")
+                return None
 
 # Streamlitアプリケーションのタイトル
 st.title('Stock Price Analysis')
 
 # ユーザーから入力を受け取るテキストボックス
 ticker = st.text_input('Enter Stock Ticker', 'AAPL')
-
-# データ取得関数
-def load_data(ticker):
-    data = yf.download(ticker, period='1d', interval='1m')
-    return data
 
 # ボタンがクリックされたときにデータを取得する
 if st.button('Load Data'):
