@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 
 # The code below writes the header for the web application 
 st.write("""
-# Stock Price Web Application
+# Forex Rate Web Application
 
-Shown are the stock closing **price** and ***volume*** of Amazon!
+Shown are the USD/JPY closing **price**!
 
-**Period**: May 2012 - May 2022
+**Period**: Last 1 month
 """)
 
 # https://towardsdatascience.com/how-to-get-stock-data-using-python-c0de1df17e75
@@ -19,15 +19,12 @@ ticker_symbol = 'USDJPY=X'
 # Get ticker data by creating a ticker object
 ticker_data = yf.Ticker(ticker_symbol)
 
-# Get Amazon historical stock data for a specified time period as a dataframe
+# Get USD/JPY historical stock data for a specified time period as a dataframe
 tickerDF = ticker_data.history(period="1mo", interval="5m")
 
 # Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
-st.write("## Stock Closing Price in USD")
+st.write("## Forex Closing Price in JPY")
 st.line_chart(tickerDF.Close)
-
-st.write("## Stock Volume in USD")
-st.line_chart(tickerDF.Volume)
 
 # ゴトー日を判定する関数
 def is_gotoubi(date):
@@ -39,6 +36,11 @@ def create_composite_chart(df):
     df['is_gotoubi'] = df.index.to_series().apply(lambda x: is_gotoubi(x))
     gotoubi_df = df[df['is_gotoubi']].copy()
 
+    # データが空の場合の処理
+    if gotoubi_df.empty:
+        st.warning("ゴトー日のデータがありません。")
+        return
+
     # 0時基準にデータを調整する
     gotoubi_df.index = pd.to_datetime(gotoubi_df.index)
     gotoubi_df['time_from_midnight'] = gotoubi_df.index.hour * 3600 + gotoubi_df.index.minute * 60 + gotoubi_df.index.second
@@ -46,6 +48,10 @@ def create_composite_chart(df):
 
     # 0:00の価格を基準に差分を計算
     base_prices = gotoubi_df[gotoubi_df['time_from_midnight'] == 0].set_index('date')['Close']
+    if base_prices.empty:
+        st.warning("ゴトー日0:00の価格データがありません。")
+        return
+    
     gotoubi_df = gotoubi_df.join(base_prices, on='date', rsuffix='_base')
     gotoubi_df['price_diff'] = gotoubi_df['Close'] - gotoubi_df['Close_base']
 
