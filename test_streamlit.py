@@ -7,9 +7,9 @@ import streamlit as st
 # 過去60日間の5分足データを取得する関数
 def get_past_sixty_days_data(ticker):
     end_date = datetime.today()
-    start_date = end_date - timedelta(days=60)
+    start_date = end_date - timedelta(days=30)
     try:
-        data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
+        data = yf.download(ticker, start=start_date, end=end_date, interval='5m', timeout=30)
         data.reset_index(inplace=True)
     except Exception as e:
         st.error(f"データの取得中にエラーが発生しました: {e}")
