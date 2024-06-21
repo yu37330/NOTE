@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import streamlit as st
 
 
+
 # 過去60日間の5分足データを取得する関数
 def get_past_sixty_days_data(ticker):
     end_date = datetime.today()
