@@ -6,20 +6,15 @@ import time
 # ページ設定
 st.set_page_config(layout='wide')
 
-# データ取得関数に再試行ロジックを追加
-def load_data(ticker, retries=3, delay=5):
-    for attempt in range(retries):
-        try:
-            data = yf.download(ticker, period='1d', interval='15m', progress=False)
-            return data
-        except Exception as e:
-            st.error(f"データの取得中にエラーが発生しました: {e}")
-            if attempt < retries - 1:
-                st.info(f"{delay}秒後に再試行します...")
-                time.sleep(delay)
-            else:
-                st.error("データの取得に失敗しました。")
-                return None
+# データ取得関数にキャッシュを追加
+@st.cache_data
+def load_data(ticker):
+    try:
+        data = yf.download(ticker, period='7d', interval='5m', progress=False)
+        return data
+    except Exception as e:
+        st.error(f"データの取得中にエラーが発生しました: {e}")
+        return None
 
 # Streamlitアプリケーションのタイトル
 st.title('Stock Price Analysis')
