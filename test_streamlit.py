@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 st.write("""
 # 合成チャートアプリケーション
 
-表示されているのはUSD/JPYの終値**価格**です！
+表示されているのはUSD/JPYの0:00を基準とした価格変動です。
 
 **期間**: 過去1ヶ月
 """)
