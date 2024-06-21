@@ -8,8 +8,12 @@ import streamlit as st
 def get_past_sixty_days_data(ticker):
     end_date = datetime.today()
     start_date = end_date - timedelta(days=60)
-    data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
-    data.reset_index(inplace=True)
+    try:
+        data = yf.download(ticker, start=start_date, end=end_date, interval='5m')
+        data.reset_index(inplace=True)
+    except Exception as e:
+        st.error(f"データの取得中にエラーが発生しました: {e}")
+        return None
     
     # データのヘッダーと最初の数行を表示して確認
     st.write("データのヘッダー:", data.head())
@@ -17,7 +21,8 @@ def get_past_sixty_days_data(ticker):
     
     # 'Date'列の存在を確認
     if 'Date' not in data.columns:
-        raise KeyError("'Date'列がデータに存在しません")
+        st.error("'Date'列がデータに存在しません")
+        return None
     
     data['Date'] = pd.to_datetime(data['Date']) + timedelta(hours=9)  # JSTに変換
     data.rename(columns={'Date': 'Datetime'}, inplace=True)
@@ -82,17 +87,14 @@ def main():
     ticker = 'USDJPY=X'  # USD/JPYのティッカーシンボル
 
     # データ取得とエラーハンドリング
-    try:
-        df = get_past_sixty_days_data(ticker)
+    df = get_past_sixty_days_data(ticker)
+    if df is not None:
         st.write("Past Sixty Days Data", df)
-
         st.write("Composite Chart")
         plt = create_composite_chart(df)
         st.pyplot(plt)
-    except KeyError as e:
-        st.error(f"データの取得中にエラーが発生しました: {e}")
-    except Exception as e:
-        st.error(f"予期しないエラーが発生しました: {e}")
+    else:
+        st.error("データの取得に失敗しました。")
 
 if __name__ == "__main__":
     main()
