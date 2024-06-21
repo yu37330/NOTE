@@ -21,21 +21,7 @@ ticker_data = yf.Ticker(ticker_symbol)
 # 指定された期間のUSD/JPYの歴史データをデータフレームとして取得
 tickerDF = ticker_data.history(period='1mo', interval="15m")
 
-# タイトルを表示
-st.write("## USD/JPYの終値")
 
-# matplotlibを使用してラインチャートを作成
-fig, ax = plt.subplots()
-ax.plot(tickerDF['Close'])
-ax.set_title('USD/JPYの終値')
-ax.set_ylabel('価格（JPY）')
-ax.set_xlabel('時間')
-
-# y軸の最小値をデータの最小値に設定
-ax.set_ylim(bottom=tickerDF['Close'].min() - (tickerDF['Close'].max() - tickerDF['Close'].min()) * 0.1)
-
-# Streamlitでチャートを表示
-st.pyplot(fig)
 
 # ゴトー日を判定する関数
 def is_gotoubi(date):
