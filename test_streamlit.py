@@ -22,10 +22,16 @@ ticker_data = yf.Ticker(ticker_symbol)
 # Get USD/JPY historical stock data for a specified time period as a dataframe
 tickerDF = ticker_data.history(period='1mo', interval="15m")
 
-# Columns: Open, High, Low Close, Volume, Dividends and Stock Splits
-st.write("## Forex Closing Price in JPY")
-st.line_chart(tickerDF.Close)
 
+# タイトルを表示
+st.write("## Forex Closing Price in USDPY")
+
+# matplotlibを使用してラインチャートを作成
+fig, ax = plt.subplots()
+ax.plot(tickerDF['Close'])
+ax.set_title('Forex Closing Price in USDJPY')
+ax.set_ylabel('Price in JPY')
+ax.set_xlabel('Time')
 # ゴトー日を判定する関数
 def is_gotoubi(date):
     day = date.day
@@ -76,14 +82,17 @@ def create_composite_chart(df):
     plt.xlim([0, 12 * 3600])
 
     # Y軸の表示範囲を設定
-    plt.ylim([-0.1, 0.2])
+    plt.ylim([-0.1, 0.5])
+
+    # 9:55に縦線を追加
+    plt.axvline(x=3*3600 + 30*60, color='red', linestyle='--', label='9:55')
 
     # 9:55に縦線を追加
     plt.axvline(x=9*3600 + 55*60, color='red', linestyle='--', label='9:55')
 
-    # 3:30から9:55に斜め矢印を追加
-    plt.annotate('', xy=(9*3600 + 55*60, 0.15), xytext=(3.5*3600, -0.05),
-                 arrowprops=dict(facecolor='red', shrink=0.05, width=5, headwidth=15))
+    # # 3:30から9:55に斜め矢印を追加
+    # plt.annotate('', xy=(9*3600 + 55*60, 0.15), xytext=(3.5*3600, -0.05),
+    #              arrowprops=dict(facecolor='red', shrink=0.05, width=5, headwidth=15))
 
     plt.legend()
     st.pyplot(plt)
