@@ -7,7 +7,7 @@ import streamlit as st
 # 過去60日間の5分足データを取得する関数
 def get_past_sixty_days_data(ticker):
     end_date = datetime.today()
-    start_date = end_date - timedelta(days=30)
+    start_date = end_date - timedelta(days=10)
     try:
         data = yf.download(ticker, start=start_date, end=end_date, interval='5m', timeout=30)
         data.reset_index(inplace=True)
