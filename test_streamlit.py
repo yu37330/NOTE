@@ -7,7 +7,7 @@ import time
 def load_data(ticker, retries=3, delay=5):
     for attempt in range(retries):
         try:
-            data = yf.download(ticker, period='1d', interval='5m', progress=False)
+            data = yf.download(ticker, period='1d', interval='15m', progress=False)
             return data
         except Exception as e:
             st.error(f"データの取得中にエラーが発生しました: {e}")
